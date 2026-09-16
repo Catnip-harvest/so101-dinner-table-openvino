@@ -50,8 +50,15 @@ say "output dir: $OUT"
 nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader | tee -a "$LOG"
 python -c "import sys; print('python', sys.version.split()[0])" | tee -a "$LOG"
 
-pipi --upgrade pip
-pipi "lerobot[smolvla,dataset]==0.6.1"
+# If lerobot is already present (pre-installed with --no-deps to keep the image's own
+# Blackwell-capable torch), do NOT let pip re-resolve: lerobot pins torch<2.12 and would
+# replace NVIDIA's build with 2.4 GB of wheels that stall on this box's route to PyPI.
+if python -c "import lerobot" 2>/dev/null; then
+  say "lerobot already installed; skipping pip resolve"
+else
+  pipi --upgrade pip
+  pipi "lerobot[smolvla,dataset]==0.6.1"
+fi
 python - <<'PY' 2>&1 | tee -a "$LOG"
 import torch, lerobot
 print("torch", torch.__version__, "| cuda", torch.version.cuda)
@@ -61,6 +68,14 @@ assert torch.cuda.is_bf16_supported(), "FATAL: bf16 unsupported; --policy.use_am
 cap = torch.cuda.get_device_capability()
 print("device", torch.cuda.get_device_name(0), "sm_%d%d" % cap,
       "| %.0f GB" % (torch.cuda.get_device_properties(0).total_memory / 1e9))
+# lerobot 0.6.1 pins torch<2.12, so pip REPLACES the image's torch. Prove the replacement
+# still carries this card's kernels; a torch without them imports fine and dies at step 0.
+archs = torch.cuda.get_arch_list()
+need = "sm_%d%d" % cap
+assert any(a.endswith(need[3:]) for a in archs), "FATAL: installed torch lacks %s kernels: %s" % (need, archs)
+print("torch arch list OK:", archs)
+x = torch.randn(1024, 1024, device="cuda", dtype=torch.bfloat16); (x @ x).sum().item()
+print("bf16 matmul on GPU OK")
 PY
 grep -q "^lerobot 0.6.1" "$LOG" || die "lerobot 0.6.1 did not install; see $LOG"
 
@@ -71,21 +86,36 @@ else
 fi
 say "train entrypoint: $TRAIN"
 
-say "=== phase 1: dataset (also proves the token works, before any GPU time is spent) ==="
-python - <<PY 2>&1 | tee -a "$LOG"
+say "=== phase 1: dataset (proves the token, the download AND video decoding before any GPU time) ==="
+VIDEO_BACKEND="${VIDEO_BACKEND:-}"   # empty = lerobot's safe default (torchcodec, else pyav)
+python - "$VIDEO_BACKEND" <<PY 2>&1 | tee -a "$LOG"
+import sys
 from lerobot.datasets.lerobot_dataset import LeRobotDataset
-ds = LeRobotDataset("$DATASET")
+vb = sys.argv[1] or None
+ds = LeRobotDataset("$DATASET", **({"video_backend": vb} if vb else {}))
 n_ep, n_fr = ds.num_episodes, ds.num_frames
-print("episodes", n_ep, "frames", n_fr, "fps", ds.fps)
+print("episodes", n_ep, "frames", n_fr, "fps", ds.fps, "| video_backend", ds.video_backend)
 assert n_ep >= 100 and n_fr >= 80000, "FATAL: dataset smaller than expected; wrong repo or partial download"
+# Actually decode a frame: this is where a torchcodec/ffmpeg mismatch surfaces.
+s = ds[len(ds) // 2]
+for k in sorted(s):
+    v = s[k]
+    if hasattr(v, "shape") and len(v.shape) >= 1:
+        print("  %-32s %s %s" % (k, tuple(v.shape), getattr(v, "dtype", "")))
+imgs = [k for k in s if k.startswith("observation.images.")]
+assert len(imgs) == 3, "FATAL: expected 3 camera keys, got %s" % imgs
+assert tuple(s["observation.state"].shape) == (12,), "FATAL: state is not 12-D"
+assert s["action"].shape[-1] == 12, "FATAL: action is not 12-D"
+print("DATASET_DECODE_OK")
 PY
-grep -q "^episodes" "$LOG" || die "dataset did not load; see $LOG"
+grep -q "^DATASET_DECODE_OK" "$LOG" || die "dataset load/decode failed; see $LOG (try VIDEO_BACKEND=pyav)"
 
 # Shared argument list, identical to the proven Kaggle command.
 common_args() {
   echo "--policy.path=lerobot/smolvla_base --dataset.repo_id=$DATASET" \
        "--policy.device=cuda --policy.push_to_hub=false --policy.use_amp=$AMP" \
-       "--wandb.enable=false"
+       "--wandb.enable=false" \
+       ${VIDEO_BACKEND:+--dataset.video_backend=$VIDEO_BACKEND}
 }
 
 # Run a short measurement at a given batch; return 0 on success, 2 on CUDA OOM, 1 otherwise.

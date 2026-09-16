@@ -94,7 +94,8 @@ from lerobot.datasets.lerobot_dataset import LeRobotDataset
 vb = sys.argv[1] or None
 ds = LeRobotDataset("$DATASET", **({"video_backend": vb} if vb else {}))
 n_ep, n_fr = ds.num_episodes, ds.num_frames
-print("episodes", n_ep, "frames", n_fr, "fps", ds.fps, "| video_backend", ds.video_backend)
+backend = getattr(ds, "video_backend", None) or getattr(ds, "_video_backend", None) or vb or "default"
+print("episodes", n_ep, "frames", n_fr, "fps", ds.fps, "| video_backend", backend)
 assert n_ep >= 100 and n_fr >= 80000, "FATAL: dataset smaller than expected; wrong repo or partial download"
 # Actually decode a frame: this is where a torchcodec/ffmpeg mismatch surfaces.
 s = ds[len(ds) // 2]
@@ -110,11 +111,17 @@ print("DATASET_DECODE_OK")
 PY
 grep -q "^DATASET_DECODE_OK" "$LOG" || die "dataset load/decode failed; see $LOG (try VIDEO_BACKEND=pyav)"
 
+# smolvla_base was pretrained with cameras named camera1..3; our dataset names them. This is
+# the exact mapping recorded in run 1's train_config.json, so run 3 stays compatible with
+# the export/eval pipeline. Compact JSON (no spaces) because the args are word-split.
+RENAME_MAP='{"observation.images.top":"observation.images.camera1","observation.images.left_wrist":"observation.images.camera2","observation.images.right_wrist":"observation.images.camera3"}'
+
 # Shared argument list, identical to the proven Kaggle command.
 common_args() {
   echo "--policy.path=lerobot/smolvla_base --dataset.repo_id=$DATASET" \
        "--policy.device=cuda --policy.push_to_hub=false --policy.use_amp=$AMP" \
        "--wandb.enable=false" \
+       "--rename_map=$RENAME_MAP" \
        ${VIDEO_BACKEND:+--dataset.video_backend=$VIDEO_BACKEND}
 }
 

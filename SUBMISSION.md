@@ -119,5 +119,6 @@ Lake, Intel Cloud `bm-ptl`) · Kaggle T4 · RTX 5090 (Vast.ai)
 
 ## Video
 
-`[link]` — scripted relay demonstrations from the dataset (top + wrist cameras), the Core Ultra
-benchmark run, and the closed-loop policy evaluation tiled across seeds.
+`out/lablab_demo.mp4` (60 s) — physics-grasp data generation (top + wrist cameras), the dataset
+and Intel Core Ultra numbers, and the closed-loop SmolVLA evaluation reel, ending on the honest
+0/20 result. Built from real assets by `build_demo.py`. Upload this file to the lablab entry.

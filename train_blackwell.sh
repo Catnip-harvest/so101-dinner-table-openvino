@@ -19,7 +19,10 @@ set -euo pipefail
 DATASET="${DATASET:-VietHwang/dinner-table-v2}"
 BUDGET_H="${BUDGET_H:-2.5}"        # wall clock for the main training step only
 BATCH="${BATCH:-64}"
-AMP="${AMP:-true}"                 # bf16 autocast; auto-falls back to fp32 if the loss goes nan
+# SmolVLA's weights are already bf16 (474/500 tensors in the run-1 checkpoint), so bf16 tensor
+# cores are used with use_amp=false. use_amp=true adds an Accelerate GradScaler that cannot
+# unscale bf16 grads (NotImplementedError: _amp_foreach_non_finite_check_and_unscale_cuda).
+AMP="${AMP:-false}"
 STEP_FLOOR="${STEP_FLOOR:-2000}"
 STEP_CEIL="${STEP_CEIL:-30000}"
 STAMP="$(date +%Y%m%d_%H%M%S)"

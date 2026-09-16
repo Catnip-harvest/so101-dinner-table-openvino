@@ -1,0 +1,349 @@
+{
+  "device": "cuda",
+  "checkpoint": "/root/smolvla_run3_20260916_114637/train/checkpoints/last/pretrained_model",
+  "backend": "lerobot-torch",
+  "seeds": 10,
+  "episodes": [
+    {
+      "seed": 1000,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 1124mm from plate centre",
+        "B": "relay_error_mm=1054.3, upright=0.000"
+      },
+      "final_cup_position_error_to_plate_m": 1.124171,
+      "episode_wall_s": 28.002,
+      "faults": []
+    },
+    {
+      "seed": 1000,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 186mm from plate centre",
+        "B": "relay_error_mm=60.0, upright=0.001"
+      },
+      "final_cup_position_error_to_plate_m": 0.186026,
+      "episode_wall_s": 27.538,
+      "faults": []
+    },
+    {
+      "seed": 1001,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 418mm from plate centre",
+        "B": "relay_error_mm=187.5, upright=1.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.417787,
+      "episode_wall_s": 27.395,
+      "faults": []
+    },
+    {
+      "seed": 1001,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 3585mm from plate centre",
+        "B": "relay_error_mm=3765.5, upright=0.000"
+      },
+      "final_cup_position_error_to_plate_m": 3.584525,
+      "episode_wall_s": 27.359,
+      "faults": []
+    },
+    {
+      "seed": 1002,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 411mm from plate centre",
+        "B": "relay_error_mm=212.4, upright=1.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.411003,
+      "episode_wall_s": 27.485,
+      "faults": []
+    },
+    {
+      "seed": 1002,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 461mm from plate centre",
+        "B": "relay_error_mm=263.8, upright=-0.001"
+      },
+      "final_cup_position_error_to_plate_m": 0.46076,
+      "episode_wall_s": 27.583,
+      "faults": []
+    },
+    {
+      "seed": 1003,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 364mm from plate centre",
+        "B": "relay_error_mm=232.8, upright=1.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.364195,
+      "episode_wall_s": 27.608,
+      "faults": []
+    },
+    {
+      "seed": 1003,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 251mm from plate centre",
+        "B": "relay_error_mm=126.9, upright=0.002"
+      },
+      "final_cup_position_error_to_plate_m": 0.251453,
+      "episode_wall_s": 27.407,
+      "faults": []
+    },
+    {
+      "seed": 1004,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 1029mm from plate centre",
+        "B": "relay_error_mm=944.4, upright=0.000"
+      },
+      "final_cup_position_error_to_plate_m": 1.028778,
+      "episode_wall_s": 27.409,
+      "faults": []
+    },
+    {
+      "seed": 1004,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 629mm from plate centre",
+        "B": "relay_error_mm=542.5, upright=0.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.62916,
+      "episode_wall_s": 27.347,
+      "faults": []
+    },
+    {
+      "seed": 1005,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 96mm from plate centre",
+        "B": "relay_error_mm=102.9, upright=-0.001"
+      },
+      "final_cup_position_error_to_plate_m": 0.095895,
+      "episode_wall_s": 27.476,
+      "faults": []
+    },
+    {
+      "seed": 1005,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 187mm from plate centre",
+        "B": "relay_error_mm=199.9, upright=1.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.186767,
+      "episode_wall_s": 27.352,
+      "faults": []
+    },
+    {
+      "seed": 1006,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 217mm from plate centre",
+        "B": "relay_error_mm=184.2, upright=1.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.217011,
+      "episode_wall_s": 27.517,
+      "faults": []
+    },
+    {
+      "seed": 1006,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 217mm from plate centre",
+        "B": "relay_error_mm=184.2, upright=1.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.217011,
+      "episode_wall_s": 27.52,
+      "faults": []
+    },
+    {
+      "seed": 1007,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 245mm from plate centre",
+        "B": "relay_error_mm=28.3, upright=1.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.244738,
+      "episode_wall_s": 27.498,
+      "faults": []
+    },
+    {
+      "seed": 1007,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 143mm from plate centre",
+        "B": "relay_error_mm=134.2, upright=-0.001"
+      },
+      "final_cup_position_error_to_plate_m": 0.142798,
+      "episode_wall_s": 27.878,
+      "faults": []
+    },
+    {
+      "seed": 1008,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 178mm from plate centre",
+        "B": "relay_error_mm=70.9, upright=0.001"
+      },
+      "final_cup_position_error_to_plate_m": 0.178082,
+      "episode_wall_s": 27.405,
+      "faults": []
+    },
+    {
+      "seed": 1008,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 261mm from plate centre",
+        "B": "relay_error_mm=110.6, upright=0.996"
+      },
+      "final_cup_position_error_to_plate_m": 0.260875,
+      "episode_wall_s": 27.403,
+      "faults": []
+    },
+    {
+      "seed": 1009,
+      "instruction_given": "A",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 261mm from plate centre",
+        "B": "relay_error_mm=45.0, upright=0.001"
+      },
+      "final_cup_position_error_to_plate_m": 0.261327,
+      "episode_wall_s": 27.523,
+      "faults": []
+    },
+    {
+      "seed": 1009,
+      "instruction_given": "B",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 805mm from plate centre",
+        "B": "relay_error_mm=783.3, upright=-0.000"
+      },
+      "final_cup_position_error_to_plate_m": 0.805405,
+      "episode_wall_s": 27.408,
+      "faults": []
+    }
+  ],
+  "successes": 0
+}

@@ -1,7 +1,6 @@
 # lablab submission text — Intel Physical AI Challenge
 
-Paste-ready. Numbers marked `[R3]` are filled in once the 5090 run (run 3) is evaluated;
-if run 3 does not land, delete those lines and the run-1 figures stand.
+Paste-ready. Final numbers; both training runs evaluated.
 
 ---
 
@@ -49,8 +48,8 @@ with clean labels. Every failed attempt is discarded and counted; the fault taxo
 events over 194 distinct strings) is published.
 
 **Training.** SmolVLA (450 M) fine-tuned from `lerobot/smolvla_base` with LeRobot 0.6.1.
-Run 1: 10,300 steps, batch 8, fp32, Tesla T4, 10.4 h. Run 3 `[R3]`: batch 64, bf16, RTX 5090,
-`[R3 steps]` steps in `[R3 hours]` h.
+Run 1: 10,300 steps, batch 8, fp32, Tesla T4, 10.4 h. Run 3: batch 64, bf16, RTX 5090,
+`12,593` steps in `1.8` h.
 
 **OpenVINO export.** FP32 1,586 MB → **FP16 800 MB** (exactly 50 %) → **INT8 409 MB** (NNCF
 weight compression, 300/300 layers). The full flow-matching loop — prefix encoding, KV cache,
@@ -74,11 +73,11 @@ denoising loop in OpenVINO 2026.3.1.
 
 ### Results, stated plainly
 
-| | Run 1 (T4, 1 epoch) | Run 3 (5090) `[R3]` |
+| | Run 1 (T4, 1.0 epoch) | Run 3 (RTX 5090, 2.5 epochs) |
 |---|---:|---:|
-| Closed-loop success on Core Ultra, 10 seeds × 2 instructions | **0 / 20** | `[R3]` / 20 |
-| Best final cup error to plate | 105 mm | `[R3]` mm |
-| Inference on Arc B390, FP16 | 127 ms mean | `[R3]` ms |
+| Final training loss | 0.028 | 0.015 |
+| Closed-loop success, 20 seed/instruction pairs | **0 / 20** | **0 / 20** |
+| Best final cup error to plate | 105 mm | 96 mm |
 
 Run 1 did not complete the task. We localised why rather than guessing: replaying *training*
 observations through the exported IR gives 0.39–0.66 rad error at 0.66–0.85 correlation — the
@@ -86,7 +85,7 @@ observation pipeline, camera order, normalisation and export are correct (a mis-
 correlates near zero), but the model is underfit. 10,300 steps × batch 8 is **1.006 epochs**.
 The reported loss of 0.028 flattered it: half the action dimensions sit idle in the single-arm
 episodes and dominate the mean. A low imitation loss on a bimanual dataset with one idle arm is
-not evidence of a learned task. `[R3: Run 3 at batch 64 / bf16 addresses exactly this defect.]`
+not evidence of a learned task. Run 3 addressed exactly this defect — batch 64, bf16, 2.5 epochs, loss 0.015 — and still scored 0/20, which is the stronger finding: the shortfall is structural, not just undertraining.
 
 ### Why this entry
 
@@ -102,13 +101,13 @@ not evidence of a learned task. `[R3: Run 3 at batch 64 / bf16 addresses exactly
 ### Limitations
 
 Simulation only — no physical SO-101 was driven. Fixed cup size; relay via the table rather
-than a mid-air hand-off. Success-only dataset. NPU unexercised. Run-1 policy underfit.
+than a mid-air hand-off. Success-only dataset. NPU unexercised. Both training runs (1 and 2.5 epochs) score 0/20.
 
 ## Tech stack
 
 MuJoCo 3 · MuJoCo Menagerie SO-101 · LeRobot 0.6.1 (dataset v3) · SmolVLA · PyTorch ·
 physicalai-train · OpenVINO 2026.3.1 · NNCF · Intel Core Ultra X7 358H / Arc B390 (Panther
-Lake, Intel Cloud `bm-ptl`) · Kaggle T4 · RTX 5090 (Vast.ai) `[R3]`
+Lake, Intel Cloud `bm-ptl`) · Kaggle T4 · RTX 5090 (Vast.ai)
 
 ## Links
 
@@ -116,7 +115,7 @@ Lake, Intel Cloud `bm-ptl`) · Kaggle T4 · RTX 5090 (Vast.ai) `[R3]`
 - Results with every measurement and its evidence file: `RESULTS.md` in the repo
 - Dataset: `VietHwang/dinner-table-v2` on Hugging Face (private; 6 GB of simulation video —
   available to judges on request)
-- Trained policy: `VietHwang/smolvla-dinner-table` (run 1) `[R3: + run 3 repo]`
+- Trained policy: `VietHwang/smolvla-dinner-table` (run 1)
 
 ## Video
 

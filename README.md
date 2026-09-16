@@ -27,7 +27,7 @@ A SmolVLA checkpoint exists and was benchmarked on the required silicon. Both he
 | Inference (FP16, iGPU) | **124.6 ms** per 50-step action chunk = **8x real time** at 50 Hz |
 | iGPU vs CPU | **16x faster** (124.6 ms vs 1,991.5 ms) |
 | NPU | graph does not compile; CPU and GPU both do |
-| Closed-loop task success | **0 / 20** (10 seeds x 2 instructions) |
+| Closed-loop task success | **0 / 20** — run 1 (1 epoch) and run 3 (2.5 epochs, loss 0.015) both |
 
 The deployment path works end to end on Panther Lake. The policy does not complete the task, and
 the cause is measured rather than assumed: it received **1.006 epochs** of training, and replaying

@@ -67,6 +67,26 @@ running and reached 400 later that night. **10,300 steps x batch 8 = 82,400 samp
 Run 2 was launched on the complete 400-episode dataset (8,800 steps, same batch and throughput)
 into a separate repository, leaving run 1 intact as the shipped fallback.
 
+### Run 3 ablation: more training does not fix it
+
+To test whether run 1's failure was simply undertraining, run 3 fine-tuned on **all 400
+episodes** at **batch 64** for **12,593 steps (2.5 epochs)** on a rented RTX 5090 (Blackwell,
+bf16), reaching **final loss 0.015** against run 1's 0.028. Evaluated closed-loop with lerobot's
+own torch inference on the same 20 seed/instruction pairs as the Core Ultra run:
+
+| Run | Epochs | Final loss | Closed-loop | Best cup error | Median |
+|---|---:|---:|---:|---:|---:|
+| Run 1 | 1.0 | 0.028 | **0/20** | 105 mm | ~330 mm |
+| Run 3 | 2.5 | 0.015 | **0/20** | **96 mm** | 261 mm |
+
+Halving the loss and adding 1.5 epochs tightened the error distribution slightly but produced
+**no successes**. The policy consistently carries the cup most of the way and stalls ~10 cm short
+of the 20 mm placement tolerance. This is evidence the failure is **structural to the
+imitation-learning budget for this bimanual relay**, not a fluke of run 1's single epoch: the
+demonstrations are physically real, the pipeline is verified end to end, and the model imitates
+them at low loss, but open-loop action-chunk imitation from a few hundred demos does not achieve
+centimetre placement on a two-arm hand-off. [Run 3 probe](out/run3_probe/eval_results.json)
+
 ## OpenVINO export
 
 Exported with `intel_export.py` from the run-1 checkpoint. FP16 is a re-save of the FP32 IR

@@ -1,0 +1,44 @@
+{
+  "devices": [
+    {
+      "device": "CPU",
+      "full_name": "Intel(R) Core(TM) Ultra X7 358H"
+    },
+    {
+      "device": "GPU",
+      "full_name": "Intel(R) Arc(TM) B390 GPU (iGPU)"
+    },
+    {
+      "device": "NPU",
+      "full_name": "Intel(R) AI Boost"
+    }
+  ],
+  "benchmarks": [
+    {
+      "device": "CPU",
+      "compile_s": 10.81,
+      "mean_ms": 1991.52,
+      "p50_ms": 1959.8,
+      "p95_ms": 2058.54,
+      "fps": 0.5,
+      "runs": 3,
+      "output_finite": true
+    },
+    {
+      "device": "GPU",
+      "compile_s": 20.81,
+      "mean_ms": 124.63,
+      "p50_ms": 124.9,
+      "p95_ms": 124.97,
+      "fps": 8.0,
+      "runs": 3,
+      "output_finite": true
+    },
+    {
+      "device": "NPU",
+      "error": "Exception from src\\inference\\src\\cpp\\core.cpp:120:\nException from src\\inference\\src\\dev\\plugin.cpp:54:\nException from src\\plugins\\intel_npu\\src\\plugin\\src\\plugin.cpp:576:\nException from src\\plugins\\intel_npu\\src\\compiler_adapter\\src\\compiler_impl.cpp:280:\nCompilation failed. vclAllocatedExecutableCr"
+    }
+  ],
+  "ir": "C:\\pai\\policy_ov\\fp16\\smolvla.xml",
+  "ir_weights_mb": 787.0
+}

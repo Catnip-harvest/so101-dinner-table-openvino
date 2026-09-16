@@ -1,0 +1,17 @@
+{
+  "devices": [
+    {
+      "device": "CPU",
+      "full_name": "Intel(R) Core(TM) Ultra X7 358H"
+    },
+    {
+      "device": "GPU",
+      "full_name": "Intel(R) Arc(TM) B390 GPU (iGPU)"
+    },
+    {
+      "device": "NPU",
+      "full_name": "Intel(R) AI Boost"
+    }
+  ],
+  "benchmarks": []
+}

@@ -1,0 +1,656 @@
+{
+  "device": "GPU",
+  "precision": "fp16",
+  "ir_path": "C:\\pai\\policy_ov\\fp16\\smolvla.xml",
+  "ir_size_mb": 798.6,
+  "openvino_version": "2026.3.1-22476-759c5a6ab8c-releases/2026/3",
+  "cpu_name": "Intel(R) Core(TM) Ultra X7 358H",
+  "NOT_THE_REQUIRED_SILICON": false,
+  "seeds": 10,
+  "seed0": 1000,
+  "max_steps": 1500,
+  "control_hz": 50,
+  "state_action_order": [
+    "right",
+    "left"
+  ],
+  "graph_contract": {
+    "full_policy": true,
+    "flow_matching_steps_inside_ir": 10,
+    "schedule": "Euler dt=-0.1; t=1.0,0.9,...,0.1"
+  },
+  "manifest": {
+    "policy": {
+      "name": "smolvla",
+      "source": {
+        "class_path": "physicalai.policies.smolvla.policy.SmolVLA"
+      }
+    },
+    "model": {
+      "runner": {
+        "class_path": "physicalai.inference.runners.single_pass.SinglePass"
+      },
+      "artifacts": {
+        "openvino": "smolvla.xml"
+      },
+      "preprocessors": [
+        {
+          "type": "smolvla_resize",
+          "image_resolution": [
+            512,
+            512
+          ]
+        },
+        {
+          "type": "new_line"
+        },
+        {
+          "type": "normalize",
+          "stats": {
+            "state": {
+              "name": "state",
+              "shape": [
+                12
+              ],
+              "type": "STATE",
+              "mean": [
+                -0.07047371566295624,
+                -1.1387990713119507,
+                0.38842153549194336,
+                1.2708028554916382,
+                -0.12221343070268631,
+                0.9827724099159241,
+                0.007436132989823818,
+                -1.3049036264419556,
+                0.31464633345603943,
+                1.4064725637435913,
+                -0.10444597899913788,
+                1.0920929908752441
+              ],
+              "std": [
+                0.5153532028198242,
+                0.5236896872520447,
+                0.40460100769996643,
+                0.417405366897583,
+                1.2444939613342285,
+                0.33467647433280945,
+                0.38859450817108154,
+                0.5210349559783936,
+                0.3281472623348236,
+                0.3379102945327759,
+                0.6350728869438171,
+                0.24945354461669922
+              ]
+            }
+          },
+          "mode": "mean_std"
+        },
+        {
+          "type": "ov_tokenizer",
+          "artifact": "tokenizer.xml"
+        }
+      ],
+      "postprocessors": [
+        {
+          "type": "denormalize",
+          "stats": {
+            "action": {
+              "name": "action",
+              "shape": [
+                12
+              ],
+              "type": "ACTION",
+              "mean": [
+                -0.07048382610082626,
+                -1.138517141342163,
+                0.3891948461532593,
+                1.2707066535949707,
+                -0.12220729142427444,
+                0.9211310744285583,
+                0.007417912129312754,
+                -1.3042616844177246,
+                0.3162200450897217,
+                1.4063944816589355,
+                -0.10443267971277237,
+                1.0513570308685303
+              ],
+              "std": [
+                0.5153659582138062,
+                0.5240411162376404,
+                0.4049980044364929,
+                0.41741350293159485,
+                1.2443550825119019,
+                0.43384793400764465,
+                0.38856303691864014,
+                0.5219190716743469,
+                0.3276333510875702,
+                0.33791980147361755,
+                0.6350091695785522,
+                0.3460029065608978
+              ]
+            }
+          },
+          "mode": "mean_std"
+        }
+      ],
+      "input_features": [
+        {
+          "class_path": "physicalai.inference.data.features.InferenceFeature",
+          "init_args": {
+            "ftype": "STATE",
+            "shape": [
+              12
+            ],
+            "name": "state",
+            "dtype": "float32"
+          }
+        },
+        {
+          "class_path": "physicalai.inference.data.features.InferenceFeature",
+          "init_args": {
+            "ftype": "VISUAL",
+            "shape": [
+              3,
+              256,
+              256
+            ],
+            "name": "images.images.top",
+            "dtype": "float32"
+          }
+        },
+        {
+          "class_path": "physicalai.inference.data.features.InferenceFeature",
+          "init_args": {
+            "ftype": "VISUAL",
+            "shape": [
+              3,
+              256,
+              256
+            ],
+            "name": "images.images.left_wrist",
+            "dtype": "float32"
+          }
+        },
+        {
+          "class_path": "physicalai.inference.data.features.InferenceFeature",
+          "init_args": {
+            "ftype": "VISUAL",
+            "shape": [
+              3,
+              256,
+              256
+            ],
+            "name": "images.images.right_wrist",
+            "dtype": "float32"
+          }
+        },
+        {
+          "class_path": "physicalai.inference.data.features.InferenceFeature",
+          "init_args": {
+            "ftype": "LANGUAGE",
+            "shape": [
+              48
+            ],
+            "name": "task",
+            "dtype": "string"
+          }
+        }
+      ],
+      "output_features": [
+        {
+          "class_path": "physicalai.inference.data.features.InferenceFeature",
+          "init_args": {
+            "ftype": "ACTION",
+            "shape": [
+              50,
+              12
+            ],
+            "name": "action",
+            "dtype": "float32"
+          }
+        }
+      ]
+    },
+    "format": "policy_package",
+    "version": "1.0"
+  },
+  "inference": {
+    "mean_ms": 127.28,
+    "p50_ms": 126.47,
+    "p95_ms": 132.44,
+    "fps": 7.9,
+    "runs": 600,
+    "compile_s": 55.66,
+    "output_finite": true
+  },
+  "episodes": [
+    {
+      "seed": 1000,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 208mm from plate centre",
+        "B": "relay_error_mm=159.9, upright=1.000, right_home_max_rad=3.158"
+      },
+      "final_cup_position_error_to_target_m": 0.208427,
+      "final_cup_position_error_to_plate_m": 0.208427,
+      "time_to_success_s": null,
+      "episode_wall_s": 282.422,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1000_A.mp4"
+    },
+    {
+      "seed": 1000,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 105mm from plate centre",
+        "B": "relay_error_mm=41.5, upright=-0.001, right_home_max_rad=3.016"
+      },
+      "final_cup_position_error_to_target_m": 0.041479,
+      "final_cup_position_error_to_plate_m": 0.105266,
+      "time_to_success_s": null,
+      "episode_wall_s": 216.751,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1000_B.mp4"
+    },
+    {
+      "seed": 1001,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 435mm from plate centre",
+        "B": "relay_error_mm=396.8, upright=-0.000, right_home_max_rad=2.971"
+      },
+      "final_cup_position_error_to_target_m": 0.435107,
+      "final_cup_position_error_to_plate_m": 0.435107,
+      "time_to_success_s": null,
+      "episode_wall_s": 216.994,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1001_A.mp4"
+    },
+    {
+      "seed": 1001,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 122mm from plate centre",
+        "B": "relay_error_mm=107.9, upright=-0.000, right_home_max_rad=3.156"
+      },
+      "final_cup_position_error_to_target_m": 0.107944,
+      "final_cup_position_error_to_plate_m": 0.122432,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.09,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1001_B.mp4"
+    },
+    {
+      "seed": 1002,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 203mm from plate centre",
+        "B": "relay_error_mm=219.4, upright=1.000, right_home_max_rad=3.023"
+      },
+      "final_cup_position_error_to_target_m": 0.199155,
+      "final_cup_position_error_to_plate_m": 0.20322,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.169,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1002_A.mp4"
+    },
+    {
+      "seed": 1002,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 202mm from plate centre",
+        "B": "relay_error_mm=219.4, upright=1.000, right_home_max_rad=2.975"
+      },
+      "final_cup_position_error_to_target_m": 0.219426,
+      "final_cup_position_error_to_plate_m": 0.20186,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.471,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1002_B.mp4"
+    },
+    {
+      "seed": 1003,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 606mm from plate centre",
+        "B": "relay_error_mm=299.7, upright=1.000, right_home_max_rad=3.159"
+      },
+      "final_cup_position_error_to_target_m": 0.605814,
+      "final_cup_position_error_to_plate_m": 0.605814,
+      "time_to_success_s": null,
+      "episode_wall_s": 216.883,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1003_A.mp4"
+    },
+    {
+      "seed": 1003,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 606mm from plate centre",
+        "B": "relay_error_mm=299.7, upright=1.000, right_home_max_rad=2.801"
+      },
+      "final_cup_position_error_to_target_m": 0.299683,
+      "final_cup_position_error_to_plate_m": 0.60581,
+      "time_to_success_s": null,
+      "episode_wall_s": 216.744,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1003_B.mp4"
+    },
+    {
+      "seed": 1004,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 252mm from plate centre",
+        "B": "relay_error_mm=101.7, upright=0.000, right_home_max_rad=2.706"
+      },
+      "final_cup_position_error_to_target_m": 0.242889,
+      "final_cup_position_error_to_plate_m": 0.251767,
+      "time_to_success_s": null,
+      "episode_wall_s": 216.928,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1004_A.mp4"
+    },
+    {
+      "seed": 1004,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 533mm from plate centre",
+        "B": "relay_error_mm=776.7, upright=0.000, right_home_max_rad=2.920"
+      },
+      "final_cup_position_error_to_target_m": 0.776671,
+      "final_cup_position_error_to_plate_m": 0.533249,
+      "time_to_success_s": null,
+      "episode_wall_s": 216.695,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1004_B.mp4"
+    },
+    {
+      "seed": 1005,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 223mm from plate centre",
+        "B": "relay_error_mm=127.7, upright=0.999, right_home_max_rad=2.854"
+      },
+      "final_cup_position_error_to_target_m": 0.223089,
+      "final_cup_position_error_to_plate_m": 0.22307,
+      "time_to_success_s": null,
+      "episode_wall_s": 379.174,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1005_A.mp4"
+    },
+    {
+      "seed": 1005,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 154mm from plate centre",
+        "B": "relay_error_mm=166.9, upright=0.006, right_home_max_rad=3.001"
+      },
+      "final_cup_position_error_to_target_m": 0.166856,
+      "final_cup_position_error_to_plate_m": 0.154387,
+      "time_to_success_s": null,
+      "episode_wall_s": 493.71,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1005_B.mp4"
+    },
+    {
+      "seed": 1006,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 813mm from plate centre",
+        "B": "relay_error_mm=773.7, upright=0.000, right_home_max_rad=2.909"
+      },
+      "final_cup_position_error_to_target_m": 0.812908,
+      "final_cup_position_error_to_plate_m": 0.812908,
+      "time_to_success_s": null,
+      "episode_wall_s": 218.54,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1006_A.mp4"
+    },
+    {
+      "seed": 1006,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 1041mm from plate centre",
+        "B": "relay_error_mm=1071.0, upright=0.000, right_home_max_rad=2.806"
+      },
+      "final_cup_position_error_to_target_m": 1.071043,
+      "final_cup_position_error_to_plate_m": 1.040834,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.597,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1006_B.mp4"
+    },
+    {
+      "seed": 1007,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 738mm from plate centre",
+        "B": "relay_error_mm=451.5, upright=-0.001, right_home_max_rad=3.158"
+      },
+      "final_cup_position_error_to_target_m": 0.737945,
+      "final_cup_position_error_to_plate_m": 0.737945,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.344,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1007_A.mp4"
+    },
+    {
+      "seed": 1007,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 875mm from plate centre",
+        "B": "relay_error_mm=589.6, upright=-0.000, right_home_max_rad=2.835"
+      },
+      "final_cup_position_error_to_target_m": 0.589585,
+      "final_cup_position_error_to_plate_m": 0.875078,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.302,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1007_B.mp4"
+    },
+    {
+      "seed": 1008,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 341mm from plate centre",
+        "B": "relay_error_mm=164.9, upright=-0.000, right_home_max_rad=3.348"
+      },
+      "final_cup_position_error_to_target_m": 0.341411,
+      "final_cup_position_error_to_plate_m": 0.341411,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.866,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1008_A.mp4"
+    },
+    {
+      "seed": 1008,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 297mm from plate centre",
+        "B": "relay_error_mm=142.1, upright=-0.000, right_home_max_rad=2.860"
+      },
+      "final_cup_position_error_to_target_m": 0.14211,
+      "final_cup_position_error_to_plate_m": 0.297281,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.482,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1008_B.mp4"
+    },
+    {
+      "seed": 1009,
+      "instruction_given": "A",
+      "instruction_text": "bring the cup across the table and set it on the plate",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 329mm from plate centre",
+        "B": "relay_error_mm=197.0, upright=-0.001, right_home_max_rad=3.159"
+      },
+      "final_cup_position_error_to_target_m": 0.329134,
+      "final_cup_position_error_to_plate_m": 0.329134,
+      "time_to_success_s": null,
+      "episode_wall_s": 216.953,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1009_A.mp4"
+    },
+    {
+      "seed": 1009,
+      "instruction_given": "B",
+      "instruction_text": "slide the cup to the middle of the table",
+      "steps": 1500,
+      "success": false,
+      "outcomes": {
+        "A": false,
+        "B": false
+      },
+      "outcome_reasons": {
+        "A": "cup 391mm from plate centre",
+        "B": "relay_error_mm=211.2, upright=0.000, right_home_max_rad=2.758"
+      },
+      "final_cup_position_error_to_target_m": 0.211171,
+      "final_cup_position_error_to_plate_m": 0.391169,
+      "time_to_success_s": null,
+      "episode_wall_s": 217.712,
+      "faults": [],
+      "video_or_frames": "C:\\pai\\out\\eval_fp16_best\\seed_1009_B.mp4"
+    }
+  ],
+  "successes": 0,
+  "instruction_swap_table": {
+    "A-given/A-done": 0,
+    "A-given/B-done": 0,
+    "B-given/A-done": 0,
+    "B-given/B-done": 0
+  },
+  "tiled_video": "C:\\pai\\out\\eval_fp16_best\\tiled_A.mp4"
+}

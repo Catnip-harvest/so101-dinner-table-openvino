@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.bak
+.env
+.env.*
+*.safetensors
+*.onnx
+*.bin
+*.xml.data
+policy_ov/
+ckpt/
+MUJOCO_LOG.TXT

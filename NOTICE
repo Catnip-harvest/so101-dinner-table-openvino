@@ -1,0 +1,12 @@
+Third-party assets
+==================
+
+sim/assets/menagerie_so101/  and  sim/assets/so101/
+    SO-101 robot description and meshes.
+    Source: MuJoCo Menagerie (Google DeepMind) and TheRobotStudio SO-ARM100/101.
+    Licensed under the Apache License 2.0; the upstream LICENSE is retained at
+    sim/assets/menagerie_so101/LICENSE.
+
+References consulted (no code or results reproduced):
+    PegBitStudio - jaw-contact "holding" check pattern.
+    peacestate    - instruction-swap evaluation pattern.

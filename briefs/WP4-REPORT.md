@@ -1,0 +1,9 @@
+# WP4 documentation report
+
+Created `README.md`, `ARCHITECTURE.md`, and `RESULTS.md` from the coordinator log, WP1/WP2/WP3 reports, runbook, plan, and simulator/collector sources. Numeric claims link to local evidence. Included the required verbatim kinematic disclosure, cup-only/table-relay scope, attribution, honest partial-volume counts, and the distinction between untrained local rehearsal and target-silicon/trained success.
+
+Final state: collection aborted with 24 kept kinematic episodes, converted to 16,236 frames and uploaded to private `VietHwang/dinner-table-v1`; remote private=True, revision `c841eb1dfdedc2113e5cc64246b6334b04f2d9f6`. Single local root `out/lerobot/VietHwang__dinner-table-v1`, no parts. Automatic tool policy rejected raw cleanup, leaving 114 NPZ/MP4 files totaling 130,898,753 bytes; last reported C free space 5.371 GiB. The 400/600 episode requirement remains unmet. [Coordinator evidence](ORCHESTRATOR-LOG.md)
+
+WP1b passed physics 7/10 and 14/20; coordinator applied its patch and restored physics defaults, with the integrated gate reproducing 7/10. Docs distinguish current physics source from historical kinematic data and pre-integration rehearsal. No physics dataset was collected after the disk abort. Kaggle requires owner Save & Run All, explicitly with only 24 episodes available; no trained checkpoint exists and the old status is stopped, dated September 13. Bundle complete at `out/tiber_bundle`, refreshed with physics sources, totaling 1,278,811,605 bytes; target execution is not claimed. [WP1b report](WP1b-REPORT.md), [integration gate](../out/wp1b-integrated-gate.log), [coordinator evidence](ORCHESTRATOR-LOG.md)
+
+Only the three root documents and this report were written. No credentials accessed, uploads, deletions, or writes under `C:/pai`. Validation: checked numerical statements against supplied local reports; no code changed and no runtime tests needed.
